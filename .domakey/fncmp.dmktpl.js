@@ -1,11 +1,11 @@
 // TODO, use common templating language
 
+const makey = require('../domakeycore');
 
+const create = async args => {
+  const useFlow = !args.flags['noflow'];
 
-const create = async makey => {
-  const useFlow = !makey.argFlags['noflow'];
-
-  const cmpName = await makey.cliArgs[0] || makey.ask("Component Name*:");
+  const cmpName = await args.list[0] || makey.ask("Component Name*:");
   if (cmpName == '') throw new Error("Component name is required");
 
   makey.heading("Imports");
@@ -40,6 +40,7 @@ const create = async makey => {
     importBuilder_temp = await makey.ask("import {what} ...: ");
     if (!importBuilder_temp !== ''){
       importBuilder.push(`import ${importBuilder_temp} from '{where}';`);
+    }
   } while (importBuilder.length > 0 && importBuilder_temp !== '');
 
   // set flow type definitions for things
@@ -60,7 +61,7 @@ export default ${cmpName};
   makey.createFile({
     fileName: `components/${cmpName}.view.js`,
     body: tmpl,
-  })
+  });
 
   // ask about generators
 

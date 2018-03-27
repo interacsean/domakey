@@ -1,4 +1,4 @@
-# DoMakey - automated code-creation template-framework
+# DoMakey - automated code-creation scripting framework
 
 ### /!\ Work in progress
 
@@ -8,9 +8,9 @@ This project is a very much a work in progress.  If you would like to contribute
 
 ## What's a 'DoMakey'
 
-The purpose of DoMakey is to enable low-level automated code-creation for developers, to reduce boilerplate.
+The purpose of DoMakey is to enable low-level, automated code-creation for developers, to reduce time spent setting up boilerplate code.
 
-DoMakey is a command line interface which will call template-building scripts that you can define yourself.  These are super straight-forward.
+DoMakey is a command line interface which will call template-building scripts you can define yourself.  These are super straight-forward.
 
 The template-building scripts should follow an interface of an asynchronous function which takes `makey` as a parameter, and (usually) returns simple file creation instructions.
 
