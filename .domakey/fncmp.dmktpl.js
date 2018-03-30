@@ -8,40 +8,37 @@ const create = async args => {
   const cmpName = await args.list[0] || makey.ask("Component Name*:");
   if (cmpName == '') throw new Error("Component name is required");
 
-  makey.heading("Imports");
-  makey.state("Note: React import will be included automatically");
+  makey.printHeading("Add any imports");
+  makey.print("  `import React from 'react';` is included automatically");
+  makey.nl();
+  makey.print("Answer for the following placeholders:")
+  makey.print("  `import {what} from '{where}';`");
 
   let importBuilder = [];
   let importBuilder_tempWhat;
   let importBuilder_tempWhere;
+  let importStmt;
   do {
-    importBuilder_tempWhat = await makey.ask("import {what} ...: ");
-    if (!importBuilder_tempWhat !== ''){
-      importBuilder_tempWhere = await ask(`import ${importBuilder_tempWhat} from '{where}';`);
-      if (!importBuilder_tempWhere !== '')
-        importBuilder.push(`import ${importBuilder_tempWhat} from '${importBuilder_tempWhere}';`);
-      else
-        proacter.state('(where not given, ${importBuilder_tempWhat} not added)');
+    importBuilder_tempWhat = await makey.ask("import {what}: ");
+    if (importBuilder_tempWhat.length){
+      importBuilder_tempWhere = await makey.ask(` ... from '{where}';`);
+      if (importBuilder_tempWhere !== ''){
+        importStmt = `import ${importBuilder_tempWhat} from '${importBuilder_tempWhere}';`;
+        importBuilder.push(importStmt);
+        makey.print(` - Added: \`${importStmt}\``);
+      }else{
+        makey.print('(where not given for: ${importBuilder_tempWhat}, not added)');
+      }
+    }else{
+      importBuilder_tempWhere = '';
     }
-      
   } while (importBuilder.length > 0 && importBuilder_tempWhere !== '');
 
-  
+  debugger;
   const flowStatement = useFlow
     ? "// @flow\n\n"
     : '';
   const importStatements = ["import React from \'react\';"].concat(importBuilder).join("\n") + "\n";
-
-
-  makey.heading("Components to use");
-  makey.state("");
-
-  do {
-    importBuilder_temp = await makey.ask("import {what} ...: ");
-    if (!importBuilder_temp !== ''){
-      importBuilder.push(`import ${importBuilder_temp} from '{where}';`);
-    }
-  } while (importBuilder.length > 0 && importBuilder_temp !== '');
 
   // set flow type definitions for things
 
