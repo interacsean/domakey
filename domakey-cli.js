@@ -1,43 +1,34 @@
 #!/usr/bin/env node
 
-const [,, cliArgsIn] = process.argv;
+/** To-do:
+ * • [_] Bug: 
+ * • [_] Specify --help interface
+ * • [_] Allow to pass in a template via '-f' or '< fileName.yaml'
+ * • [_] domakeycore to take flags for parsing questions for y/n, for eg.
+ */
 
-if (cliArgsIn.length < 1) {
+const domakeycore = require('./lib/domakeycore');
+const getCliArgs = require('./lib/getCliArgs');
+
+const { line: cliArgsLine, flags: cliArgsFlags } = getCliArgs(process.argv.slice(2));
+
+if (cliArgsLine < 1) {
+  process.stdout.write("domakey says: You must pass at least one argument to specify what to makey!\n")
   process.exit();
 }
 
-const entityName = cliArgsIn[0];
-
-// TODO: if !exists('.domakey/'+entityName) process.exit();
-
-const entity = require(`./.domakey/${entityName}`);
-
-// takes args and splits out flags
-const argFlags = cliArgs => {
-
-}
-
-const argsList = cliArgsInqreduce(() => void, []);
-const flags = cliArgsIn.reduce(() => void, []);
-
+const entityName = cliArgsLine[0];
 try {
+  const entity = require(`./.domakey/${entityName}.dmktpl`); 
   entity({
-    argsList,
-    flags,
-    ask: (question, optFlags) => {
-      // TODO query the cli
-    },
-    state: statement => {
-      // TODO just output to io
-    }
-    heading: statement => {
-      return `=== ${statement} ===`;
-      // TODO just output to io
-    }
-    createFile: {fileName, body} => {
-      // TODO create file
-    }
-  })
-} catch (err) {
-  console.log(err.message);
+    list: cliArgsLine.slice(1),
+    flags: cliArgsFlags,
+  });
+
+} catch (e) {
+  if (e instanceof Error && e.code === "MODULE_NOT_FOUND")
+    process.stdout.write(`domakey says: I couldn't find the template ${entityName} in \`./.domakey/\`\n`)
+  else
+    throw e;
+  process.exit();
 }
