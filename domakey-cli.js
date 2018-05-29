@@ -19,15 +19,17 @@ if (cliArgsLine < 1) {
 
 const entityName = cliArgsLine[0];
 try {
-  const entity = require(`./.domakey/${entityName}.dmktpl`); 
+  const entity = require(`${process.cwd()}/.domakey/${entityName}.dmktpl`); 
   entity({
+    name: entityName,
     list: cliArgsLine.slice(1),
     flags: cliArgsFlags,
+    makey: domakeycore,
   });
 
 } catch (e) {
   if (e instanceof Error && e.code === "MODULE_NOT_FOUND")
-    process.stdout.write(`domakey says: I couldn't find the template ${entityName} in \`./.domakey/\`\n`)
+    process.stdout.write(`domakey says: I couldn't find the template ${entityName} in \`${process.cwd()}/.domakey/\`\n`)
   else
     throw e;
   process.exit();

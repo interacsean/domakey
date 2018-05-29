@@ -1,12 +1,11 @@
-const makey = require('../lib/domakeycore');
-
 const create = async args => {
+  const makey = args.makey;
   const useFlow = args.flags['use-flow'];
   const cmpName = await (args.list[0] || makey.ask("Component Name*:"));
 
   if (cmpName == '') throw new Error("Component name is required");
 
-  makey.printHeading("Add any imports");
+  makey.printHeading("Add any imports (enter blank to skip)");
   makey.print("  `import React from 'react';` is included automatically");
   makey.nl();
   makey.print("Answer for the following placeholders:")
@@ -18,8 +17,8 @@ const create = async args => {
   let importStmt;
   do {
     importBuilder_tempWhat = await makey.ask("import {what}: ");
-    if (importBuilder_tempWhat.length){
-      importBuilder_tempWhere = await makey.ask(` ... from '{where}';`);
+    if (importBuilder_tempWhat !== ''){
+      importBuilder_tempWhere = await makey.ask(` ... from '{where}';: `);
       if (importBuilder_tempWhere !== ''){
         importStmt = `import ${importBuilder_tempWhat} from '${importBuilder_tempWhere}';`;
         importBuilder.push(importStmt);
@@ -32,7 +31,6 @@ const create = async args => {
     }
   } while (importBuilder.length > 0 && importBuilder_tempWhere !== '');
 
-  debugger;
   const flowStatement = useFlow
     ? "// @flow\n\n"
     : '';
@@ -40,13 +38,11 @@ const create = async args => {
 
   // set flow type definitions for things
 
-  const returnJsx = "<div></div>";
-
   const tmpl = `${flowStatement}${importStatements}
 
 const ${cmpName} = (props) => {
   return (
-    ${returnJsx}
+    <div></div>
   );
 }
 

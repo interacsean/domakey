@@ -17,10 +17,15 @@ The template-building scripts should export an asynchronous function which takes
 The main features of the `makey` object are:
 
 ```
-const compName = await (makey.cliArgs[0] || makey.ask('Component Name:')); // from `$ domakey component HomeController`
-const hasFlow = makey.ask('Would you like to enable flow typing? (y/n)', makey.PARSE_YES_NO);
+// File: component.dmktpl.js
 
-// ... define compBody, and possible testBody based on more user input
+const compName = await (makey.cliArgs[0] || makey.ask('Component Name:'));
+// reads from cli args: `$ domakey component HomeController`
+
+const hasFlow = await makey.askYN('Would you like to enable flow typing?');
+// prompts 'Would you like to enable flow typing? (Y/n)' and casts to boolean
+
+// ... code to define `compBody`, and possibly `testBody` based on more user input
 
 makey.createFile({ fileName: `components/${compName}.jsx`, body: compBody });
 componentHasTest && makey.createFile({ fileName: `components/${compName}.spec.jsx`, body: testBody });
@@ -36,4 +41,4 @@ There were numerous, opinionated and framework-specific creation tools out there
 
 I'm aiming for DoMakey to also parse a structured input file (json / yaml... not sure yet) and batch pump the input through to the script files.  In this way, a developer could set up script files (for example: for React Components, Redux reducers, action creators, stylesheets) then skeleton an app within the input file to have DoMakey magic up the general app framework.  Then you code out the logic without getting sidetracked on following formatting procedures.
 
-I'll be adding to my own DoMakeyTpl libary along the way, firstly focused on functional React/Redux and Express / Node / Sequelize stacks.  Maybe some good samaratin could help provide Angular / Vue stack templates
+I'll be adding to my own DoMakeyTpl libary along the way, firstly focused on functional React/Redux and Express / Node / Sequelize stacks.  Maybe some good samaratin could help provide Angular / Vue stack templates.
