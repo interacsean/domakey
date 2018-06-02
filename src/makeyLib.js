@@ -19,16 +19,24 @@ module.exports = {
   askYN: async (question, defaultYes = true) => {
     const ans = await ask(
       question
-      + ' ' + (defaultYes ? '(Y/n)':'(y/N)')
+      + ' ' + (defaultYes ? '(Y/n) ':'(y/N) ')
     );
     return (ans.toLowerCase()[0] == 'y' || (ans === '' && defaultYes));
   },
-  print: statement => {
-    printToScreen(statement)
+  print: (statement) => {
+    printToScreen(statement, nl)
   },
   printHeading: statement => {
     printToScreen(`\n=== ${statement} ===`)
   },
   nl: () => printToScreen(""),
-  createFile: ({fileName, body}) => fs.writeFileSync(fileName, body),
+  createFile: ({fileName, body}) => {
+    try {
+      fs.writeFileSync(fileName, body);
+      return true;
+    } catch (e) {
+      printToScreen(e, true);
+      return false;
+    }
+  },
 };

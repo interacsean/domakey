@@ -6,7 +6,7 @@ module.exports = orig => ({
     orig.forEach(arg => {
       if (arg.substr(0, 5) == '--no-') {
         flagObj[arg.substr(5)] = false;
-      } else if (arg[0] === '-') {
+      } else if (arg.substr(0, 2) === '--') {
         flagObj[arg.replace(/^-*/g, '')] = true;
       }
     });
