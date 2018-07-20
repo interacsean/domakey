@@ -1,6 +1,6 @@
 {
   "name": "domakey",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Automated code-creation scripting framework",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,5 +10,8 @@
   "bin": {
     "domakey": "./src/domakeyCli.js"
   },
-  "main": "./src/makeyLib.js"
+  "main": "./src/makeyLib.js",
+  "devDependencies": {
+    "jest": "^23.4.1"
+  }
 }

@@ -14,7 +14,7 @@ The key features of `makey` examplified here:
 module.exports = async ({ cliArgs, makey }) => {
   // Read from passed cli param: `$ domakey component HomePage`
   const compName = cliArgs[0];
-  
+
   // Ask for user input:
   const pageTitle = await makey.ask('Component\'s page title:');
 
@@ -35,9 +35,7 @@ module.exports = async ({ cliArgs, makey }) => {
 }
 ```
 
-## Documentation
-
-### Installation
+## Installation
 
 **Option 1.  Install globally**
 `npm install -g domakey`
@@ -54,8 +52,10 @@ Run with: `npm run domakey -- tmplName param1 param2`
 
 or w/ yarn: `yarn domakey tmplName param1 param2`
 
-#### Get started:
-Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `./domakey/myNewTemplate.js`
+### Get started:
+Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `/.domakey/myNewTemplate.js`
+
+## Documentation
 
 ### CLI arguments
 
@@ -63,13 +63,15 @@ Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `./domak
 
 Where...
 
-`tmplName` is a script filename (with or without '.js' extension) within the `./domakey/` directory
+`tmplName` is a script filename (with or without '.js' extension) within the `/.domakey/` directory
 
 `params` are arbitrary, repeatable parameters to be passed to your script.
 
-For example:
+Any argument preceeded by two dashes (`--`) will be cast to boolean; if starting with '`--no-`', it will become false, otherwise true.  These can be passed anywhere after the script name parameter (order has no effect.)
 
-`domakey parser --ignore-whitespace --no-overwrite json html` will run `./domakey/parser.js`.  The function in parser.js will receive the following argument:
+**For example:**
+
+`domakey parser --ignore-whitespace --no-overwrite json html` will run `/.domakey/parser.js`.  The function in parser.js will receive the following argument:
 
 ```
 {
@@ -84,13 +86,11 @@ For example:
 ```
 *\*The* makey *parameter is always present and is described below.*
 
-Any argument preceeded by two dashes (`--`) will be cast to boolean; if starting with '`--no-`', it will become false, otherwise true.  These can be passed anywhere after the script name parameter (order has no effect.)
-
 ### Template files
 
-**You will need to create a directory `./domakey` at your project root level** 
+**You will need to create a directory `.domakey` at your project root level**
 
-In ./domakey, your template-building scripts should export a single asynchronous function which takes an object as a single argument.
+In /.domakey, your template-building scripts should export a single asynchronous function which takes an object as a single argument.
 
 The argument will be passed with the following keys:
 
@@ -105,7 +105,7 @@ Key Name                | Description
 
 *\*\*You can opt to include* `const makey = require('makey');` *at the top of your template files, instead of using the passed param key.  Up to you.*
 
-**Quickstart tip:** Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `./domakey/myNewTemplate.js`
+**Quickstart tip:** Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `/.domakey/myNewTemplate.js`
 
 ### The *makey* interface
 
@@ -170,22 +170,38 @@ Prints a new line only
 Write a new file.
 
 *Parameters*
- - `config` (Object) - With the following keys:
-  - `fileName` (string) - The path, relative to execution, of the file to create
-  - `body` (string) - The contents of the file 
+ - `fileName` (string) - The path, relative to execution, of the file to create
+ - `body` (string) - The contents of the file
 
 *Returns*
  - `boolean` - true if successfully written.
 
 ```
-const boolWriteSuccess = createFile({
+const boolWriteSuccess = createFile(
+  `src/bandits/${banditNameVar}.js`,
+  banditBioVar,
+);
+```
+
+**editFile**
+Amend an existing file.
+
+*Parameters*
+ - `fileName` (string) - The path, relative to execution, of the file to create
+ - `callback` (function) - A function which is called with a single parameter: the existing content of the file.  This callback should return the new contents of the file as a string.  If the callback returns `false`, the file will not be changed.
+
+*Returns*
+ - `boolean` - true if successfully edited.
+
+```
+const boolWriteSuccess = editFile(
   fileName: `src/bandits/${banditNameVar}.js`,
-  body: banditBioVar,
-});
+  edit: existingBody => `${existingBody}${banditExportLine};\n`,
+);
 ```
 
 ---
-*end of documentation*
+*(end of documentation)*
 
 ## Why?
 
@@ -195,4 +211,4 @@ There were numerous, opinionated and framework-specific creation tools out there
 
 I'm aiming for DoMakey to also parse a structured input file (json / yaml... not sure yet) and batch pump the input through to the script files.  In this way, a developer could set up script files (for example: for React Components, Redux reducers, action creators, stylesheets) then skeleton an app within the input file to have DoMakey magic up the general app framework.  Then you code out the logic without getting sidetracked on following formatting procedures.
 
-I'll be adding to my own DoMakeyTpl libary along the way, firstly focused on functional React/Redux and Express / Node / Sequelize stacks.  Maybe some good samaratin could help provide Angular / Vue stack templates.
+I'll be adding to my own DoMakey template libary along the way, firstly focused on functional React/Redux and Express / Node / Sequelize stacks.  Maybe some good samaratin could help provide Angular / Vue stack templates.
