@@ -9,7 +9,7 @@ DoMakey is a command line interface which calls template-building scripts you wr
 The key features of `makey` examplified here:
 
 ```
-// File: /.domakey/component.js
+// File: .domakey/component.js
 
 module.exports = async ({ cliArgs, makey }) => {
   // Read from passed cli param: `$ domakey component HomePage`
@@ -23,15 +23,15 @@ module.exports = async ({ cliArgs, makey }) => {
 
   // ... define `compBody`, and possibly `testBody`
 
-  makey.createFile({
-    fileName: `components/${compName}.jsx`,
-    body: compBody,
-  });
+  makey.createFile(
+    `components/${compName}.jsx`,
+    compBody,
+  );
 
-  componentHasTest && makey.createFile({
-    fileName: `components/${compName}.spec.jsx`,
-    body: testBody,
-  });
+  componentHasTest && makey.createFile(
+    `components/${compName}.spec.jsx`,
+    testBody,
+  );
 }
 ```
 
@@ -53,7 +53,7 @@ Run with: `npm run domakey -- tmplName param1 param2`
 or w/ yarn: `yarn domakey tmplName param1 param2`
 
 ### Get started:
-Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `/.domakey/myNewTemplate.js`
+Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `.domakey/myNewTemplate.js`
 
 ## Documentation
 
@@ -63,7 +63,7 @@ Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `/.domak
 
 Where...
 
-`tmplName` is a script filename (with or without '.js' extension) within the `/.domakey/` directory
+`tmplName` is a script filename (with or without '.js' extension) within the `.domakey/` directory
 
 `params` are arbitrary, repeatable parameters to be passed to your script.
 
@@ -71,7 +71,7 @@ Any argument preceeded by two dashes (`--`) will be cast to boolean; if starting
 
 **For example:**
 
-`domakey parser --ignore-whitespace --no-overwrite json html` will run `/.domakey/parser.js`.  The function in parser.js will receive the following argument:
+`domakey parser --ignore-whitespace --no-overwrite json html` will run `.domakey/parser.js`.  The function in parser.js will receive the following argument:
 
 ```
 {
@@ -90,7 +90,7 @@ Any argument preceeded by two dashes (`--`) will be cast to boolean; if starting
 
 **You will need to create a directory `.domakey` at your project root level**
 
-In /.domakey, your template-building scripts should export a single asynchronous function which takes an object as a single argument.
+In `.domakey/yourTemplateFile.js`, you should export a single asynchronous function which takes an object as a single argument.
 
 The argument will be passed with the following keys:
 
@@ -105,13 +105,14 @@ Key Name                | Description
 
 *\*\*You can opt to include* `const makey = require('makey');` *at the top of your template files, instead of using the passed param key.  Up to you.*
 
-**Quickstart tip:** Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `/.domakey/myNewTemplate.js`
+**Quickstart tip:** Run `domakey dmktmpl myNewTemplate` to create a boilerplate template at `.domakey/myNewTemplate.js`
 
 ### The *makey* interface
 
 The functions available in the `makey` object are listed here.
 
 **ask**
+
 Render text to the console and await user response.
 
 *Parameters*
@@ -125,6 +126,7 @@ const strFaveFruit = await makey.ask('What\'s your favourite fruit?');
 ```
 
 **askYN**
+
 Render text to the console, adding " (Y/n) ", and awaits a user response which is cast to boolean.
 
 *Parameters*
@@ -139,6 +141,7 @@ const boolIsCool = await makey.askYN('Do you think I\'m cool?');
 ```
 
 **print**
+
 Prints text to screen.  A new line is automatically added afterwards.
 
 *Parameters*
@@ -149,6 +152,7 @@ makey.print('Now hear this');
 ```
 
 **printHeading**
+
 Prints text to screen in `=== my heading ===`
 
 *Parameters*
@@ -160,6 +164,7 @@ makey.print('Testing options');
 ```
 
 **nl**
+
 Prints a new line only
 
 *No Parameters*
@@ -167,6 +172,7 @@ Prints a new line only
 `nl();`
 
 **createFile**
+
 Write a new file.
 
 *Parameters*
@@ -184,6 +190,7 @@ const boolWriteSuccess = createFile(
 ```
 
 **editFile**
+
 Amend an existing file.
 
 *Parameters*
@@ -195,8 +202,8 @@ Amend an existing file.
 
 ```
 const boolWriteSuccess = editFile(
-  fileName: `src/bandits/${banditNameVar}.js`,
-  edit: existingBody => `${existingBody}${banditExportLine};\n`,
+  `src/bandits/${banditNameVar}.js`,
+  existingBody => `${existingBody}${banditExportLine};\n`,
 );
 ```
 
