@@ -6,7 +6,7 @@ The purpose of DoMakey is to enable automated code-creation for developers, thus
 
 DoMakey is a command line interface which calls template-building scripts you write yourself.  (These are super straight-forward, don't freak.)
 
-The key features of `makey` examplified here:
+The key features of `domakey` are exemplified here:
 
 ```
 // File: .domakey/component.js
