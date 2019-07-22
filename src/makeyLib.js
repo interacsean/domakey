@@ -80,4 +80,44 @@ module.exports = {
       return accTmpl.replace(rgx, arrReplace[i]);
     }, template);
   },
+  camelToSnakeCaps: camel => {
+    const upperChars = camel.match(/([A-Z])/g);
+    if (! upperChars) {
+      return camel.toUpperCase();
+    }
+
+    let snake = camel;
+    for (let i = 0, n = upperChars.length; i < n; i++) {
+      snake = snake.replace(new RegExp(upperChars[i]), '_' + upperChars[i]);
+    }
+
+    if (snake.slice(0, 1) === '_') {
+      snake = snake.slice(1);
+    }
+
+    return snake.toUpperCase();
+  },
+  camelToKebab: camel => {
+    const upperChars = camel.match(/([A-Z])/g);
+    if (! upperChars) {
+      return camel.toLowerCase();
+    }
+
+    let snake = camel;
+    for (let i = 0, n = upperChars.length; i < n; i++) {
+      snake = snake.replace(new RegExp(upperChars[i]), '-' + upperChars[i]);
+    }
+
+    if (snake.slice(0, 1) === '_') {
+      snake = snake.slice(1);
+    }
+
+    return snake.toLowerCase();
+  },
+  toUpperCaseFirst: function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  },
+  toLowerCaseFirst: function (string) {
+    return string.charAt(0).toLowerCase() + string.slice(1);
+  },
 };
